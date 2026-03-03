@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALESSANDRO 6000 // CONCURSOS MONITOR</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --cyan: #00d4ff;
+            --cyan-glow: rgba(0, 212, 255, 0.5);
+            --blue: #0080ff;
+            --green: #00ff88;
+            --green-glow: rgba(0, 255, 136, 0.4);
+            --orange: #ff8800;
+            --red: #ff4444;
+            --purple: #aa00ff;
+            --bg-dark: #050508;
+            --bg-panel: rgba(10, 15, 25, 0.95);
+            --bg-card: rgba(15, 22, 35, 0.98);
+            --text-primary: #e0f0ff;
+            --text-secondary: #6080a0;
+            --border: rgba(0, 212, 255, 0.3);
+        }
+        
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .sync-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 15px 25px;
+            background: rgba(10, 15, 25, 0.95);
+            border: 1px solid var(--cyan);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            color: var(--cyan);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+        
+        .sync-status.active {
+            display: flex;
+        }
+        
+        .loading-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--cyan);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px var(--cyan-glow), inset 0 0 20px var(--cyan-glow);
+        }
+        
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 20px var(--cyan-glow);
+            letter-spacing: 4px;
+        }
+        
+        .logo-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            letter-spacing: 6px;
+        }
+        
+        .status-section {
+            text-align: right;
+        }
+        
+        .status-dot {
+            width: 14px;
+            height: 14px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--green-glow);
+            animation: blink 1.5s infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .datetime {
+            font-size: 20px;
+            color: var(--text-secondary);
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 1000px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            position: relative;
+            clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+        }
+        
+        .panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+        
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .panel-icon {
+            width: 35px;
+            height: 35px;
+            border: 1px solid var(--cyan);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--cyan);
+        }
+        
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--cyan);
+            letter-spacing: 2px;
+        }
+        
+        .panel-content {
+            padding: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan-glow);
+        }
+        
+        .stat-value.success { color: var(--green); text-shadow: 0 0 10px var(--green-glow); }
+        .stat-value.warning { color: var(--orange); }
+        .stat-value.api { color: var(--purple); }
+        
+        .gauge-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .gauge {
+            width: 180px;
+            height: 180px;
+            position: relative;
+        }
+        
+        .gauge svg {
+            transform: rotate(-90deg);
+        }
+        
+        .gauge-bg {
+            fill: none;
+            stroke: rgba(0, 212, 255, 0.1);
+            stroke-width: 10;
+        }
+        
+        .gauge-fill {
+            fill: none;
+            stroke: var(--cyan);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1s ease;
+            filter: drop-shadow(0 0 8px var(--cyan-glow));
+        }
+        
+        .gauge-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .gauge-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 15px var(--cyan-glow);
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            background: transparent;
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        
+        .btn:hover {
+            background: var(--cyan-glow);
+            box-shadow: 0 0 30px var(--cyan-glow);
+        }
+        
+        .btn-primary {
+            background: var(--cyan);
+            color: var(--bg-dark);
+        }
+        
+        .btn-danger {
+            border-color: var(--red);
+            color: var(--red);
+        }
+        
+        .btn-danger:hover {
+            background: rgba(255, 68, 68, 0.2);
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4);
+        }
+        
+        .btn-api {
+            border-color: var(--purple);
+            color: var(--purple);
+        }
+        
+        .btn-api:hover {
+            background: rgba(170, 0, 255, 0.2);
+            box-shadow: 0 0 30px rgba(170, 0, 255, 0.4);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+        
+        .concursos-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .concurso-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+        }
+        
+        .concurso-card:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 30px var(--cyan-glow);
+            transform: translateX(5px);
+        }
+        
+        .concurso-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--cyan);
+        }
+        
+        .concurso-card.aberto::before { background: var(--green); }
+        .concurso-card.previsto::before { background: var(--orange); }
+        .concurso-card.api { border-left: 3px solid var(--purple); }
+        
+        .concurso-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+            gap: 15px;
+        }
+        
+        .concurso-orgao {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .api-badge {
+            background: var(--purple);
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .concurso-cargo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan-glow);
+            line-height: 1.3;
+        }
+        
+        .concurso-status {
+            padding: 8px 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+        
+        .status-aberto {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+        
+        .status-previsto {
+            background: rgba(255, 136, 0, 0.2);
+            color: var(--orange);
+            border: 1px solid var(--orange);
+        }
+        
+        .concurso-body {
+            padding: 20px;
+        }
+        
+        .info-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+        
+        .concurso-actions {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .concurso-actions .btn {
+            padding: 10px 20px;
+            font-size: 12px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+        
+        .message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 20px 30px;
+            background: var(--bg-panel);
+            border: 1px solid var(--cyan);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .message.success { border-color: var(--green); box-shadow: 0 0 20px var(--green-glow); }
+        .message.error { border-color: var(--red); box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        
+        .tab.active {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            margin-bottom: 15px;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+        
+        .search-input {
+            flex: 1;
+        }
+        
+        .alert-box {
+            background: rgba(255, 136, 0, 0.1);
+            border: 1px solid var(--orange);
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="sync-status" id="sync-status">
+        <div class="loading-spinner"></div>
+        <div>
+            <div>SINCRONIZANDO...</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-circle">
+                    <span style="font-size: 28px;">⚖</span>
+                </div>
+                <div>
+                    <div class="logo-text">ALESSANDRO 6000</div>
+                    <div class="logo-subtitle">CONCURSOS MONITOR - BRASÍLIA</div>
+                </div>
+            </div>
+            <div class="status-section">
+                <div style="margin-bottom: 5px;">
+                    <span class="status-dot"></span>
+                    <span style="font-family: 'Orbitron'; color: var(--green);">ONLINE</span>
+                </div>
+                <div class="datetime" id="datetime">--/--/---- --:--:--</div>
+            </div>
+        </header>
+        
+        <div class="main-grid">
+            <div class="left-column">
+                <div class="panel" style="margin-bottom: 20px;">
+                    <div class="panel-header">
+                        <div class="panel-icon">◉</div>
+                        <span class="panel-title">STATUS</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="gauge-container">
+                            <div class="gauge">
+                                <svg width="180" height="180" viewBox="0 0 180 180">
+                                    <circle class="gauge-bg" cx="90" cy="90" r="70"/>
+                                    <circle class="gauge-fill" id="monitor-gauge" cx="90" cy="90" r="70"/>
+                                </svg>
+                                <div class="gauge-text">
+                                    <div class="gauge-value" id="total-concursos">0</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary);">CONCURSOS</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <span class="stat-label">📢 Abertos</span>
+                            <span class="stat-value success" id="count-abertos">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">📅 Previstos</span>
+                            <span class="stat-value warning" id="count-previstos">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">🌐 Internet</span>
+                            <span class="stat-value api" id="count-api">0</span>
+                        </div>
+                        
+                        <div style="margin-top: 15px; font-size: 11px; color: var(--text-secondary); text-align: center;" id="last-sync">
+                            Dados pré-carregados (funciona offline)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-icon">⚡</div>
+                        <span class="panel-title">AÇÕES</span>
+                    </div>
+                    <div class="panel-content">
+                        <button class="btn btn-api" style="width: 100%; margin-bottom: 10px;" onclick="tentarSincronizar()">
+                            🌐 TENTAR SINCRONIZAR
+                        </button>
+                        <button class="btn" style="width: 100%; margin-bottom: 10px;" onclick="exportData()">
+                            💾 EXPORTAR DADOS
+                        </button>
+                        <button class="btn btn-danger" style="width: 100%;" onclick="clearAll()">
+                            🗑️ LIMPAR TUDO
+                        </button>
+                        
+                        <div style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.3); font-size: 12px; color: var(--text-secondary); border-left: 3px solid var(--orange);">
+                            ⚠️ Se o sync falhar, use os dados locais ou hospede o arquivo online (GitHub Pages).
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="center-column">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('list', this)">📋 LISTA</div>
+                    <div class="tab" onclick="switchTab('add', this)">➕ ADICIONAR</div>
+                </div>
+                
+                <div id="tab-list" class="tab-content active">
+                    <div class="alert-box" id="alert-offline" style="display: none;">
+                        ⚠️ MODO OFFLINE - Usando dados locais de Brasília. Para atualizar pela internet, hospede este arquivo no GitHub Pages ou abra em um servidor.
+                    </div>
+                    
+                    <div class="panel" style="margin-bottom: 20px;">
+                        <div class="panel-header">
+                            <div class="panel-icon">⌕</div>
+                            <span class="panel-title">BUSCAR</span>
+                        </div>
+                        <div class="panel-content">
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <input type="text" class="form-input search-input" id="search-input" 
+                                       placeholder="Buscar órgão ou cargo..." onkeyup="renderConcursos()">
+                                <button class="btn" onclick="document.getElementById('search-input').value=''; renderConcursos()">LIMPAR</button>
+                            </div>
+                            <div class="filter-row">
+                                <button class="filter-btn active" onclick="filterByStatus('todos', this)">TODOS</button>
+                                <button class="filter-btn" onclick="filterByStatus('aberto', this)">ABERTOS</button>
+                                <button class="filter-btn" onclick="filterByStatus('previsto', this)">PREVISTOS</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">☰</div>
+                            <span class="panel-title">CONCURSOS</span>
+                        </div>
+                        <div class="panel-content">
+                            <div class="concursos-list" id="concursos-list">
+                                <div class="empty-state">CARREGANDO...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab-add" class="tab-content">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">+</div>
+                            <span class="panel-title">NOVO CONCURSO</span>
+                        </div>
+                        <div class="panel-content">
+                            <form onsubmit="saveConcurso(event)">
+                                <input type="text" class="form-input" id="orgao" placeholder="Órgão (ex: CAIXA)" required>
+                                <input type="text" class="form-input" id="cargo" placeholder="Cargo (ex: Técnico Bancário)" required>
+                                <input type="text" class="form-input" id="vagas" placeholder="Vagas (ex: 100)">
+                                <select class="form-select" id="status" required>
+                                    <option value="aberto">📢 Aberto</option>
+                                    <option value="previsto">📅 Previsto</option>
+                                </select>
+                                <textarea class="form-textarea" id="observacoes" placeholder="Observações..." rows="3"></textarea>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-primary">SALVAR</button>
+                                    <button type="button" class="btn" onclick="limparForm()">LIMPAR</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DADOS PRÉ-CARREGADOS DE BRASÍLIA (Funcionam offline!)
+        const DADOS_LOCAIS = [
+            { id: 'local_1', orgao: 'CAIXA ECONÔMICA FEDERAL', cargo: 'Técnico Bancário - Vagas: 500', estado: 'DF/Brasília', vagas: '500', status: 'previsto', observacoes: 'Autorizado! Aguardando edital. Previsto para 2025.', api: false },
+            { id: 'local_2', orgao: 'PCDF - POLÍCIA CIVIL DO DF', cargo: 'Agente de Polícia - Vagas: 150', estado: 'DF/Brasília', vagas: '150', status: 'aberto', observacoes: 'Inscrições abertas! Nível superior em qualquer área.', api: false },
+            { id: 'local_3', orgao: 'MARINHA DO BRASIL', cargo: 'CP-T/CFN - Vagas: 1.680', estado: 'DF/Brasília', vagas: '1.680', status: 'aberto', observacoes: 'Concurso nacional com vagas para Brasília.', api: false },
+            { id: 'local_4', orgao: 'FUNAI - FUNDAÇÃO NACIONAL DOS ÍNDIOS', cargo: 'Analista e Técnico - Vagas: 900', estado: 'DF/Brasília', vagas: '900', status: 'aberto', observacoes: 'Vagas para nível médio e superior.', api: false },
+            { id: 'local_5', orgao: 'IGESDF - HOSPITAL DE BASE', cargo: 'Médicos e Enfermeiros - Vagas: Várias', estado: 'DF/Brasília', vagas: 'Várias', status: 'aberto', observacoes: 'Saúde pública do DF. Edital publicado.', api: false },
+            { id: 'local_6', orgao: 'REDE SARAH (DF)', cargo: 'Técnicos e Analistas - Vagas: Várias', estado: 'DF/Brasília', vagas: 'Várias', status: 'aberto', observacoes: 'Hospital Sarah Kubitschek.', api: false },
+            { id: 'local_7', orgao: 'INSS', cargo: 'Técnico do Seguro Social - Vagas: 8.500', estado: 'DF/Brasília', vagas: '8.500', status: 'previsto', observacoes: 'Concurso autorizado! Previsão de edital para breve.', api: false },
+            { id: 'local_8', orgao: 'SEFAZ DF', cargo: 'Auditor Fiscal - Vagas: 265', estado: 'DF/Brasília', vagas: '265', status: 'previsto', observacoes: 'Autorizado! Excelente remuneração.', api: false },
+            { id: 'local_9', orgao: 'SEDES DF', cargo: 'Assistente Social e Psicólogo - Vagas: 1.197', estado: 'DF/Brasília', vagas: '1.197', status: 'previsto', observacoes: 'Secretaria de Desenvolvimento Social.', api: false },
+            { id: 'local_10', orgao: 'TCU', cargo: 'Auditor Federal de Controle Externo - Vagas: 20', estado: 'DF/Brasília', vagas: '20', status: 'previsto', observacoes: 'Nível superior. Um dos melhores salários do país.', api: false }
+        ];
+
+        let concursos = [];
+        let currentFilter = 'todos';
+        let editandoId = null;
+
+        function init() {
+            // Tenta carregar do localStorage primeiro
+            const salvos = localStorage.getItem('alessandro_concursos_v3');
+            if (salvos) {
+                concursos = JSON.parse(salvos);
+            } else {
+                // Se não tiver nada, usa os dados locais pré-carregados
+                concursos = [...DADOS_LOCAIS];
+                saveData();
+            }
+            
+            renderConcursos();
+            updateStats();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Tenta sincronizar silenciosamente (pode falhar por CORS, mas tentei)
+            setTimeout(tentarSincronizarSilencioso, 2000);
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('datetime').textContent = 
+                now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
+        }
+
+        function saveData() {
+            localStorage.setItem('alessandro_concursos_v3', JSON.stringify(concursos));
+        }
+
+        function updateStats() {
+            const total = concursos.length;
+            const abertos = concursos.filter(c => c.status === 'aberto').length;
+            const previstos = concursos.filter(c => c.status === 'previsto').length;
+            const apiCount = concursos.filter(c => c.api).length;
+            
+            document.getElementById('total-concursos').textContent = total;
+            document.getElementById('count-abertos').textContent = abertos;
+            document.getElementById('count-previstos').textContent = previstos;
+            document.getElementById('count-api').textContent = apiCount;
+            
+            const offset = 440 - (440 * Math.min(total / 20, 1));
+            document.getElementById('monitor-gauge').style.strokeDashoffset = offset;
+        }
+
+        function renderConcursos() {
+            const lista = document.getElementById('concursos-list');
+            const busca = document.getElementById('search-input').value.toLowerCase();
+            
+            let filtrados = concursos.filter(c => {
+                const matchBusca = c.orgao.toLowerCase().includes(busca) || c.cargo.toLowerCase().includes(busca);
+                const matchStatus = currentFilter === 'todos' || c.status === currentFilter;
+                return matchBusca && matchStatus;
+            });
+            
+            // Ordena: abertos primeiro, depois previstos
+            filtrados.sort((a, b) => (a.status === 'aberto' ? -1 : 1));
+            
+            if (filtrados.length === 0) {
+                lista.innerHTML = '<div class="empty-state">Nenhum concurso encontrado</div>';
+                return;
+            }
+            
+            lista.innerHTML = filtrados.map(c => `
+                <div class="concurso-card ${c.status} ${c.api ? 'api' : ''}">
+                    <div class="concurso-header">
+                        <div>
+                            <div class="concurso-orgao">
+                                ${c.orgao}
+                                ${c.api ? '<span class="api-badge">INTERNET</span>' : ''}
+                            </div>
+                            <div class="concurso-cargo">${c.cargo}</div>
+                        </div>
+                        <span class="concurso-status status-${c.status}">
+                            ${c.status === 'aberto' ? '📢 ABERTO' : '📅 PREVISTO'}
+                        </span>
+                    </div>
+                    <div class="concurso-body">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px;">
+                            <div>
+                                <div class="info-label">VAGAS</div>
+                                <div class="info-value">${c.vagas || '-'}</div>
+                            </div>
+                            <div>
+                                <div class="info-label">LOCAL</div>
+                                <div class="info-value">${c.estado}</div>
+                            </div>
+                        </div>
+                        ${c.observacoes ? `<div style="font-size: 14px; color: var(--text-secondary); border-top: 1px dashed rgba(0,212,255,0.2); padding-top: 10px; margin-top: 10px;">${c.observacoes}</div>` : ''}
+                    </div>
+                    <div class="concurso-actions">
+                        <button class="btn" onclick="editar('${c.id}')" style="padding: 8px 16px; font-size: 12px;">✎ EDITAR</button>
+                        <button class="btn btn-danger" onclick="excluir('${c.id}')" style="padding: 8px 16px; font-size: 12px;">✕ EXCLUIR</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterByStatus(status, btn) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderConcursos();
+        }
+
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function saveConcurso(e) {
+            e.preventDefault();
+            
+            const novo = {
+                id: editandoId || 'manual_' + Date.now(),
+                orgao: document.getElementById('orgao').value.toUpperCase(),
+                cargo: document.getElementById('cargo').value,
+                vagas: document.getElementById('vagas').value,
+                status: document.getElementById('status').value,
+                observacoes: document.getElementById('observacoes').value,
+                estado: 'DF/Brasília',
+                api: false
+            };
+            
+            if (editandoId) {
+                const idx = concursos.findIndex(c => c.id === editandoId);
+                if (idx >= 0) concursos[idx] = novo;
+            } else {
+                concursos.push(novo);
+            }
+            
+            saveData();
+            renderConcursos();
+            updateStats();
+            limparForm();
+            switchTab('list', document.querySelectorAll('.tab')[0]);
+            mostrarMensagem('CONCURSO SALVO!');
+        }
+
+        function editar(id) {
+            const c = concursos.find(x => x.id === id);
+            if (!c) return;
+            
+            document.getElementById('orgao').value = c.orgao;
+            document.getElementById('cargo').value = c.cargo;
+            document.getElementById('vagas').value = c.vagas;
+            document.getElementById('status').value = c.status;
+            document.getElementById('observacoes').value = c.observacoes || '';
+            
+            editandoId = id;
+            switchTab('add', document.querySelectorAll('.tab')[1]);
+        }
+
+        function excluir(id) {
+            if (!confirm('Excluir este concurso?')) return;
+            concursos = concursos.filter(c => c.id !== id);
+            saveData();
+            renderConcursos();
+            updateStats();
+        }
+
+        function limparForm() {
+            document.getElementById('orgao').value = '';
+            document.getElementById('cargo').value = '';
+            document.getElementById('vagas').value = '';
+            document.getElementById('observacoes').value = '';
+            editandoId = null;
+        }
+
+        function clearAll() {
+            if (!confirm('EXCLUIR TODOS OS CONCURSOS?')) return;
+            concursos = [];
+            saveData();
+            renderConcursos();
+            updateStats();
+        }
+
+        function exportData() {
+            const blob = new Blob([JSON.stringify(concursos, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'concursos_brasilia_backup.json';
+            a.click();
+            mostrarMensagem('DADOS EXPORTADOS!');
+        }
+
+        function mostrarMensagem(txt) {
+            const div = document.createElement('div');
+            div.className = 'message success';
+            div.innerHTML = `<span style="font-family: Orbitron;">${txt}</span>`;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        // TENTATIVA DE SINCRONIZAÇÃO (Pode falhar por CORS, mas tenta)
+        async function tentarSincronizar() {
+            document.getElementById('sync-status').classList.add('active');
+            
+            try {
+                // Tenta buscar da API
+                const response = await fetch('https://concursos-api.deno.dev/df', {
+                    method: 'GET',
+                    mode: 'cors', // Tenta CORS
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (!response.ok) throw new Error('Falha na API');
+                
+                const data = await response.json();
+                let novos = 0;
+                
+                // Processa abertos
+                if (data.concursos_abertos) {
+                    data.concursos_abertos.forEach((item, idx) => {
+                        const id = 'api_aberto_' + idx;
+                        if (!concursos.find(c => c.id === id)) {
+                            concursos.push({
+                                id: id,
+                                orgao: item.Órgão || 'Órgão não informado',
+                                cargo: 'Concurso Aberto - Vagas: ' + (item.Vagas || '-'),
+                                vagas: item.Vagas || '-',
+                                estado: 'DF/Brasília',
+                                status: 'aberto',
+                                observacoes: 'Dados da internet (concursos-api.deno.dev)',
+                                api: true
+                            });
+                            novos++;
+                        }
+                    });
+                }
+                
+                // Processa previstos
+                if (data.concursos_previstos) {
+                    data.concursos_previstos.forEach((item, idx) => {
+                        const id = 'api_previsto_' + idx;
+                        if (!concursos.find(c => c.id === id)) {
+                            concursos.push({
+                                id: id,
+                                orgao: item.Órgão.replace(' previsto', '') || 'Órgão não informado',
+                                cargo: 'Concurso Previsto - Vagas: ' + (item.Vagas || '-'),
+                                vagas: item.Vagas || '-',
+                                estado: 'DF/Brasília',
+                                status: 'previsto',
+                                observacoes: 'Previsto - aguardando edital',
+                                api: true
+                            });
+                            novos++;
+                        }
+                    });
+                }
+                
+                if (novos > 0) {
+                    saveData();
+                    renderConcursos();
+                    updateStats();
+                    document.getElementById('last-sync').textContent = 'Sincronizado: ' + new Date().toLocaleTimeString();
+                    mostrarMensagem(`SINCRONIZADO! ${novos} novos concursos`);
+                } else {
+                    mostrarMensagem('DADOS JÁ ATUALIZADOS');
+                }
+                
+            } catch (e) {
+                console.log('Erro de sincronização (CORS):', e);
+                document.getElementById('alert-offline').style.display = 'block';
+                mostrarMensagem('MODO OFFLINE - Use os dados locais');
+            } finally {
+                document.getElementById('sync-status').classList.remove('active');
+            }
+        }
+
+        function tentarSincronizarSilencioso() {
+            tentarSincronizar();
+        }
+
+        // Inicia
+        init();
+    </script>
+</body>
+</html>
